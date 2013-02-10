@@ -1,0 +1,867 @@
+<!DOCTYPE HTML>
+<html lang="ja" ng-app="tutorial">
+<head>
+  <meta charset="UTF-8">
+  <title>AngularJS's tutorial - あなたとともにAngularJS</title>
+  <link rel="stylesheet" href="css/bootstrap/bootstrap.min.css">
+  <link rel="stylesheet" href="css/bootstrap/bootstrap-responsive.min.css">
+  <link rel="stylesheet" href="js/google-code-prettify/prettify.css">
+  <link rel="stylesheet" href="css/index.min.css">
+</head>
+<body>
+
+<div class="navbar navbar-inverse navbar-fixed-top">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </a>
+      <a class="brand" href="#">AngularJS's tutorial</a>
+
+      <div class="nav-collapse collapse">
+        <ul class="nav">
+          <li class="active"><a href="#">Home</a></li>
+          <li><a href="http://hisasann.com/">hisasann</a></li>
+        </ul>
+      </div>
+      <!--/.nav-collapse -->
+    </div>
+  </div>
+</div>
+
+<div class="container">
+<div class="hero-unit">
+  <h1>AngularJS's tutorial
+    <small>あなたとともにAngularJS</small>
+  </h1>
+
+  <p>AngularJSの入門用のチュートリアルを作ってみました</p>
+
+  <p>なかなかまだ日本語の記事がなかったので、少しだけですが使ってみたことをメモしておきます</p>
+
+  <p>TwitterBootstrap、google-code-prettify、CoffeeScript、Sass、Compass、Grunt.js</p>
+
+  <p class="author">by hisasann</p>
+
+  <p>
+    <a class="btn btn-primary btn-large">
+      Github
+    </a>
+  </p>
+</div>
+
+<h2 class="page-header">入力値を他の要素に反映する</h2>
+
+<p>テキストボックスに <strong>ng-model</strong> を付与し、反映したい変数を入れる</p>
+
+<pre class="prettyprint linenums">
+&lt;input type=&quot;text&quot; ng-model=&quot;name&quot;&gt;
+</pre>
+
+<p>あとは好きな場所に出力のコードを書くだけ！</p>
+
+<pre class="prettyprint linenums">
+{ {'あなたの名前は ' + name} }
+</pre>
+
+<h3>サンプル</h3>
+
+<p>名前：<input type="text" ng-model="name"></p>
+
+<p>名前： 'あなたの名前は' <strong>{{name}}</strong> です</p>
+
+<h2 class="page-header">コントローラーを使ってみる</h2>
+
+<pre class="prettyprint linenums">
+ng-controller="controller1"
+</pre>
+
+<p>でコントローラーを使う範囲をdivタグなどで囲います</p>
+
+<p>囲われたdivタグの中ではコントローラーのほうでセットされた変数を見ることができまる</p>
+
+<p>たとえばusersという配列をプロパティにセットしている場合は</p>
+
+<pre class="prettyprint linenums">
+$scope.users = [{name: "hisasann", score: 10}];
+</pre>
+
+<pre class="prettyprint linenums">
+{ {users.length} }
+</pre>
+
+<p>や</p>
+
+<pre class="prettyprint linenums">
+{ {user.name} } { {user.score} }
+</pre>
+
+<p>などが使えます</p>
+
+<p>また配列をループしたい場合は、</p>
+
+<pre class="prettyprint linenums">
+ng-repeat="user in users"
+</pre>
+
+<p>のように <strong>ng-repeat</strong> 属性を付与し、eachすることが可能です</p>
+
+<h3>サンプル</h3>
+
+<div ng-controller="controller1">
+  <p>length: {{users.length}}</p>
+  <ul class="unstyled">
+    <li ng-repeat="user in users">
+      {{user.name|uppercase}} {{user.score|number:4}}
+    </li>
+  </ul>
+</div>
+
+<h2 class="page-header">フィルターを使ってみる</h2>
+
+<p>パイプでnumberやcurrencyを渡す</p>
+
+<p>フィルターは非常に便利で、主に数値や日付、または文字列のそうさなどいろいろなことが可能です</p>
+
+<pre class="prettyprint linenums">
+{ {20 * 500|number} }
+</pre>
+
+<p>で3桁ごとにカンマを入れられたり、</p>
+
+<pre class="prettyprint linenums">
+{ {today|date:"yyyy-MM-dd"} }
+</pre>
+
+<p>で日付のフォーマットを変えられます</p>
+
+<div ng-controller="controller1">
+  <table class="table table-bordered table-striped">
+    <tr>
+      <td>カンマを入れる</td>
+      <td>{{20 * 500|number}}</td>
+    </tr>
+    <tr>
+      <td>下何桁</td>
+      <td>{{20 * 500|number:3}}</td>
+    </tr>
+    <tr>
+      <td>ドル</td>
+      <td>{{30 * 500|currency}}</td>
+    </tr>
+    <tr>
+      <td>円</td>
+      <td>{{30 * 500|currency:"¥"}}</td>
+    </tr>
+    <tr>
+      <td>日付</td>
+      <td>{{today|date:"yyyy-MM-dd"}}</td>
+    </tr>
+  </table>
+</div>
+
+<h2 class="page-header">ループでフィルターを使ってみる</h2>
+
+<p>ループ時にリミットを決めたり、orderByを指定したり、便利なフィルターがあります</p>
+
+<p>このあたりが非常に面白いところですね！</p>
+
+<pre class="prettyprint linenums">
+ng-repeat="user in users|limitTo:2|orderBy:'-score'"
+</pre>
+
+<p>orderByにはuserモデルの中にある <strong>score</strong> を指定しています</p>
+
+<p>はじめにマイナスが付いているの降順の指定です</p>
+
+<h3>サンプル</h3>
+
+<div ng-controller="controller1">
+  <ul class="unstyled">
+    <li ng-repeat="user in users|orderBy:'-score'|limitTo:2">
+      {{user.name|uppercase}} {{user.score|number:4}}
+    </li>
+  </ul>
+</div>
+
+<h2 class="page-header">フィルターを使ってテキストで絞り込む</h2>
+
+<p>複数あるリストを入力値によって絞り込みをしたい場合に活用できます</p>
+
+<pre class="prettyprint linenums">
+ng-model="query.name"
+</pre>
+
+<p>テキストボックスにの <strong>query</strong> を入れて、クエリ可能なテキストボックスにします</p>
+
+<p>このとき、 <strong>query.name</strong> のようにドットでモデルのプロパティをしていしておくと、<br>
+  そのプロパティでのみ絞り込むことが可能です<br>
+  プロパティの指定がないとすべてのプロパティが対象になります</p>
+
+<div ng-controller="controller1">
+
+  <h3>サンプル</h3>
+
+  <p><input type="text" ng-model="query.name"></p>
+  <ul class="unstyled">
+    <li ng-repeat="user in users|filter:query">
+      {{user.name}} {{user.score|number}}
+    </li>
+  </ul>
+</div>
+
+<h2 class="page-header">ループで各行を交互に色分けしてみる</h2>
+
+<div ng-controller="controller1">
+
+<pre class="prettyprint linenums">
+ng-repeat="user in users"
+</pre>
+
+  <p>を指定したループするタグに</p>
+
+<pre class="prettyprint linenums">
+ng-class-even="'even'" ng-class-odd="'odd'"
+</pre>
+
+  <p>のように、 <strong>ng-class-even</strong> と <strong>ng-class-odd</strong> にクラスを指定するだけです<br>
+    一点気をつけないといけないのは、クラスを指定するところにはダブルコートの中にさらにシングルコートを入れているところです</p>
+
+  <table class="table table-bordered">
+    <tr ng-repeat="user in users" ng-class-even="'even'" ng-class-odd="'odd'">
+      <td>index : {{$index + 1}}</td>
+      <td>first : {{$first}}</td>
+      <td>middle : {{$middle}}</td>
+      <td>last : {{$last}}</td>
+      <td>{{user.name}} - {{user.score|number}}</td>
+    </tr>
+  </table>
+</div>
+
+<p>これで簡単に偶数行奇数行で色を変えることができます</p>
+
+<h2 class="page-header">コントローラーを入れ子にしてclickイベントを貼ってみる</h2>
+
+<p>外側のdivタグに <strong>ng-controller="controller1"</strong> が付いていて、<br>
+  ネストした内側に <strong>ng-controller="controller2"</strong> がある状態にします<br>
+  そしてネストされた中で <strong>ng-click="show()"</strong> のようにclickイベントをbindします</p>
+
+<pre class="prettyprint linenums">
+modalBody = $('#modalBody')
+modal = $('#modal')
+
+window.controller2 = ($scope) ->
+  $scope.show = () ->
+    modalBody.html($scope.user.name)
+    modal.modal({backdrop:true})
+</pre>
+
+<p>ネストしたcontroller2のほうで、showイベントを追加しています<br>
+  ここでのポイントは <strong>$scope.user.name</strong> のようにeachしているところの変数にアクセスできる点です</p>
+
+<p>この値をModalに渡して表示しています</p>
+
+<div ng-controller="controller1">
+  <div>
+    <table class="table table-bordered">
+      <tr ng-repeat="user in users" ng-controller="controller2" ng-class-even="'even'" ng-class-odd="'odd'">
+        <td>index : {{$index + 1}}</td>
+        <td>name : {{user.name}}</td>
+        <td>score : {{user.score|number}}</td>
+        <td>
+          <button class="btn btn-primary" ng-click="show()">Show</button>
+        </td>
+      </tr>
+    </table>
+
+    <!-- Modal -->
+    <div id="modal" class="modal hide fade">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3>Modal</h3>
+      </div>
+      <div class="modal-body">
+        name: <strong>{{showUser}}</strong>
+      </div>
+      <div class="modal-footer">
+      </div>
+    </div>
+  </div>
+</div>
+
+<h2 class="page-header">formを使って、バリデーション・submitし、Modelに値を追加してみよう</h2>
+
+<p>submit時のイベントは <strong>ng-submit</strong> にコントローラーのメソッドを指定します</p>
+
+<pre class="prettyprint linenums">
+ng-submit="appendUser()"
+</pre>
+
+<p>バリデーションには <strong>required ng-minlength="5" ng-maxlength="10"</strong> のようにただ指定するだけです</p>
+
+<p>種類に関しては詳しくはこちらをご覧ください <a href="http://docs.angularjs.org/api/ng.directive:input" target="_blank">AngularJS: input</a>
+</p>
+
+<p>バリデーションでエラーが発生した場合に、エラーの要素を表示する必要があります<br>
+  これには</p>
+
+<pre class="prettyprint linenums">
+ng-show="form1.name.$error.required"
+</pre>
+
+<p>のようにformのnameから始まりチェックしたい要素のnameを指定します</p>
+
+<p>これだけでエラーの要素が表示されたり非表示になってくれます。簡単！</p>
+
+<p>チェックボックスは</p>
+
+<pre class="prettyprint linenums">
+ng-true-value="YES" ng-false-value="NO"
+</pre>
+
+<p>のようにチェックが入った場合とチェックが外れた場合の値をセットできます</p>
+
+<p>セレクトボックスは本来selectタグをoptionタグを書く必要がありますが、AngularJSは優秀で、</p>
+
+<pre class="prettyprint linenums">
+ng-options="kind for kind in ['ラーメン屋', 'つけ麺屋', '家系']"
+</pre>
+
+<p>のように、モデルの中身を指定するとoptionタグを自動で生成してくれます<br>
+  ↑のサンプルだとピンとこないですが、実際には以下のようになります</p>
+
+<pre class="prettyprint linenums">
+ng-options="user.name for user in users"
+</pre>
+
+<p>ちなみにformタグに <strong>novalidate</strong> 属性を付与していますが、これはHTML5のバリデーションが働かないようにしています</p>
+
+<div ng-controller="controller1">
+  <form novalidate name="form1" ng-submit="appendUser()">
+    <table class="table table-bordered">
+      <tr>
+        <td>お店の名前</td>
+        <td><input type="text" name="name" ng-model="shop.name" required ng-minlength="5" ng-maxlength="10"></td>
+        <td>
+          <div class="alert fade in" ng-show="form1.name.$error.required">
+            お店の名前が入力されていません！
+          </div>
+          <div class="alert fade in" ng-show="form1.name.$error.minlength">
+            少ないよ、もっと入れてよ！
+          </div>
+          <div class="alert fade in" ng-show="form1.name.$error.maxlength">
+            そんなに入れちゃいやだよ！
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td>あなたのメアド</td>
+        <td><input type="email" name="email" ng-model="shop.email"></td>
+        <td>
+          <div class="alert fade in" ng-show="form1.email.$error.email">
+            どうして捨てアドなの？ねぇ、ねってば！
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td>ボッタクリ店？</td>
+        <td><input type="checkbox" ng-model="shop.bottakuri" ng-true-value="YES" ng-false-value="NO"></td>
+      </tr>
+      <tr>
+        <td>メモ</td>
+        <td><textarea ng-model="shop.memo" name="memo" cols="30" ng-maxlength="20"></textarea> {{20 - shop.memo.length}}
+        </td>
+        <td>
+          <div class="alert fade in" ng-show="form1.memo.$error.maxlength">
+            多すぎ！笑
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td>何屋さん？</td>
+        <td><select name="" ng-model="shop.kind" ng-options="kind for kind in ['ラーメン屋', 'つけ麺屋', '家系']"
+                    ng-init="shop.kind='ラーメン屋'"></select></td>
+      </tr>
+    </table>
+
+    <p>append時はshop.nameに値がある場合のみ追加するようにしています<br>
+      この値がある状態というはバリデーションを突破した場合にのみ入るので、JavaScriptで自前でバリデーションする必要がありません</p>
+
+<pre class="prettyprint linenums">
+$scope.appendUser = () ->
+  if this.shop.name
+    this.shops.push this.shop
+</pre>
+
+    <input type="submit" class="btn btn-primary" value="append">
+  </form>
+
+  <p>modelの変化を観察するのに、以下のようにjson出力しています<br>
+    こうゆうのを手軽に用意しているあたりがにくい！</p>
+
+<pre class="prettyprint linenums">
+{ {shop|json} }
+</pre>
+
+  <pre>shop : {{shop|json}}</pre>
+  <pre>shops : {{shops|json}}</pre>
+
+  <p>参考リンク：<a href="http://docs.angularjs.org/api/ng.filter:json" target="_blank">AngularJS: json</a></p>
+</div>
+
+<h2 class="page-header">$httpでAjaxリクエストしてみる</h2>
+
+<p>jQueryのようにわりと簡単にかける <br>
+  $httpへのcacheオプションに渡せるのは <strong>boolean</strong>か <strong>$cacheFactory</strong> <br>
+  falseを入れるとキャッシュが有効にならないので、毎回リクエストされるが、$cacheFactoryを渡すとキャッシュが有効になる <br>
+  ここの使い方は今後調査する</p>
+
+<p><a href="http://docs.angularjs.org/api/ng.$cacheFactory" target="_blank">AngularJS: $cacheFactory</a></p>
+
+<pre class="prettyprint linenums">
+$http(
+  method: $scope.method
+  url: $scope.url
+  cache: $templateCache
+  ).success((data, status) ->
+    $scope.status = status
+    $scope.data = data
+
+    $scope.name = data.name
+    $scope.siteUrl = data.url
+  ).error (data, status) ->
+    $scope.data = data || "Request failed"
+    $scope.status = status
+</pre>
+
+<p>相変わらず$scopeの値を書き換えるとすぐにViewに反映されるのは便利だ</p>
+
+<div ng-controller="controller3">
+  <p>
+    <button class="btn btn-primary" ng-click="fetch()">Request</button>
+  </p>
+  <pre>http status code: {{status}}</pre>
+  <pre>http response data: {{data}}</pre>
+  <pre>name : {{name}}</pre>
+  <pre>url : {{siteUrl}}</pre>
+</div>
+
+<h2 class="page-header">コントローラーから別のコントローラーへ値を渡す方法</h2>
+
+<h3>event.targetScopeで取ってみる</h3>
+
+<p><strong>$on</strong>でイベントをセットしておいて、 <strong>$emit</strong>でイベントをfireする <br>
+  WebSocketっぽさがありますね
+  値の取得は、ハンドラ内で <strong>event.targetScope</strong>を指定すると$emitしたcontrollerの$scopeが取れるので、
+  あとはそこから値を取るだけになります</p>
+
+<pre class="prettyprint linenums">
+window.controller1 = () ->
+  # actionイベントハンドラ
+  $scope.$on 'action', (event) ->
+    $scope.showUser = event.targetScope.showUser
+
+window.controller2 = () ->
+  $scope.show = () ->
+    $scope.showUser = this.user.name
+
+    # emitでイベントをfire
+    $scope.$emit 'action'
+</pre>
+
+<p><strong>$emit</strong>以外に <strong>$broadcast</strong>というのがあるが、 <br>
+  これは以下のリンクがわかりやすい <br>
+  $emitは自分自身と親のcontroller内のイベントをfireするが、$broadcastは自分自身と子どもたち内のイベントをfireする</p>
+
+<a href="http://jsfiddle.net/sebmade/GkarV/" target="_blank">AngularJS scope Example - jsFiddle</a>
+
+<h3>$emitでイベントをfireするときにハッシュを渡す</h3>
+
+<p>こっちのほうが読みやすいですね <br>
+  ↑の方法だとcontroller2に不必要に$scope.showUserというプロパティを作らないといけなかったんですが、 <br>
+  こちらの方法だと引数として渡せるので直感的です</p>
+
+<pre class="prettyprint linenums">
+window.controller1 = () ->
+  # actionイベントハンドラ
+  $scope.$on 'action', (event, args) ->
+    $scope.showUser = args.showUser
+
+window.controller2 = () ->
+  $scope.show = () ->
+    # emitでイベントをfire
+    $scope.$emit 'action', showUser: this.user.name
+</pre>
+
+<h2 class="page-header">$scopeなど、AngularJSがどうやって仮引数を固定しているか</h2>
+
+<p>AngularJSを使い始めた頃、$scopeってPHPみたいだからscopeにしようと思って実行してみたらこれがまた動かない <br>
+  なので、いったいこの仮引数を固定させるのをどうやってるのかなーと追ってみたら、ただ単純にfunction文字列から正規表現で引数を抜き取って <br>
+  チェックしているだけだった</p>
+
+<p>がぴょーーーん！</p>
+
+<p>一応それをやっている箇所をメモっておく</p>
+
+<pre class="prettyprint linenums">
+var FN_ARGS = /^function\s*[^\(]*\(\s*([^\)]*)\)/m;
+var FN_ARG_SPLIT = /,/;
+var FN_ARG = /^\s*(_?)(\S+?)\1\s*$/;
+var STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg;
+function annotate(fn) {
+  var $inject,
+      fnText,
+      argDecl,
+      last;
+
+  if (typeof fn == 'function') {
+    if (!($inject = fn.$inject)) {
+      $inject = [];
+      fnText = fn.toString().replace(STRIP_COMMENTS, '');
+      argDecl = fnText.match(FN_ARGS);
+      forEach(argDecl[1].split(FN_ARG_SPLIT), function(arg){
+        arg.replace(FN_ARG, function(all, underscore, name){
+          $inject.push(name);
+        });
+      });
+      fn.$inject = $inject;
+    }
+  } else if (isArray(fn)) {
+    last = fn.length - 1;
+    assertArgFn(fn[last], 'fn')
+    $inject = fn.slice(0, last);
+  } else {
+    assertArgFn(fn, 'fn', true);
+  }
+  return $inject;
+}
+</pre>
+
+  <h2 class="page-header">$injectを使ってコントローラーにserviceを注入する</h2>
+
+  <p>$injectを使って依存性の注入ができるようだ <br>
+  ここでの注入とは、コントローラーが使うべきserviceを固定することとぼくは捉えている <br>
+  というのもコントローラーが使うべきservieは$httpのように引数に書けばそれが使えるが、$injectに渡された配列によって、 <br>
+  これ以外のserviceを使えなくしている</p>
+
+  <p>serviceを作るにはfactoryメソッドを使う</p>
+
+  <div ng-controller="controller4">
+    <p>{{message}}</p>
+  </div>
+
+<pre class="prettyprint linenums">
+angular.module('controller4Module', []).factory('controller4Service', () ->
+  message: 'controller4Message'
+)
+
+window.controller4 = ($scope, controller4Service) ->
+$scope.message = controller4Service.message;
+
+window.controller4.$inject = ['$scope', 'controller4Service']
+</pre>
+
+  <p>実際、以下の行はなくても動く</p>
+
+<pre class="prettyprint linenums">
+window.controller4.$inject = ['$scope', 'controller4Service']
+</pre>
+
+  <p>さらに言うと、以下の$httpはundefinedになる <br>
+  これは$injectによって依存性が注入されていないからだと思われる</p>
+
+<pre class="prettyprint linenums">
+window.controller4 = ($scope, controller4Service, $http) ->
+</pre>
+
+  <p><a href="http://docs.angularjs.org/guide/dev_guide.services.injecting_controllers" target="_blank">AngularJS: Injecting Services Into Controllers</a></p>
+  <p><a href="http://docs.angularjs.org/api/AUTO.$injector" target="_blank">AngularJS: $injector</a></p>
+
+  <h2 class="page-header">シンプルにdirectiveを使ってみる</h2>
+
+  <p>directiveとはdirectiveが指定さえたタグの中を操作する、AngularJSの内部では極々一般的に使われているもののようだ <br>
+  たとえばngRepeatやngControllerなどngなんちゃらと付くものはだいたいdirectiveでできている <br>
+  さらには<a href="https://github.com/angular-ui/angular-ui/blob/master/modules/directives/animate/animate.js" target="_blank">angular-ui/modules/directives/animate/animate.js</a>のようなAngularUIたちももちろんdirectiveでできている</p>
+
+  <p>なので自分オリジナルなdirectiveを作る場合に、効果が発揮される <br>
+  ただし、わりと理解しにくる箇所が多々あるので、ぼくも勉強中であります！</p>
+
+  <p>directiveもfactory同様moduleに追加していく</p>
+
+<pre class="prettyprint linenums">
+window.controller5 = ($scope, $http, $templateCache) ->
+
+angular.module('controller5Module', [])
+  .directive('controller5Directive', () ->
+    (scope, element, attrs) ->
+      scope.hello = 'controller5'
+  )
+</pre>
+
+  <p>上記のようにcontroller5Directiveというdirective名にした場合、HTMLのほうでは</p>
+
+<pre class="prettyprint linenums">
+&lt;div controller5-directive&gt;{{hello}}&lt;/div&gt;
+</pre>
+
+  <p>のように大文字になるところをハイフンで繋ぐようです</p>
+
+  <h3>サンプル</h3>
+
+  <div ng-controller="controller5">
+    <div controller5-directive>{{hello}}</div>
+  </div>
+
+  <h2 class="page-header">ボタンをクリックするとフェードアウトするdirectiveを作ってみる</h2>
+
+  <p>では今度はもう少しだけ進んで、ボタンをクリックされたらフェードアウトするという機能をdirectiveを使ってやっていみましょう <br>
+  directiveの作り方は上記と同じですが、関数の中身を変えていきます</p>
+
+<pre class="prettyprint linenums">
+window.controller6 = ($scope) ->
+
+angular.module('controller6Module', [])
+  .directive('controller6Directive', () ->
+    (scope, element, attrs) ->
+      scope.hello = 'controller6'
+
+      jqElem = angular.element(element)
+      jqElem.find('#fadeOut').bind('click', () ->
+        $(jqElem).fadeOut attrs.duration
+      )
+  )
+</pre>
+
+<pre class="prettyprint linenums">
+&lt;div controller6-directive duration=&quot;2000&quot;&gt;
+{ {hello} }
+&lt;button class=&quot;btn btn-primary&quot; id=&quot;fadeOut&quot;&gt;fadeOut&lt;/button&gt;
+&lt;/div&gt;
+</pre>
+
+  <p>directiveに渡した関数には3つの引数がありますが、elementとattrsを使ってみます <br>
+  elementにはdirectiveが指定された要素が入っています <br>
+  attrsにはdirectiveが指定された要素の属性が入っています</p>
+
+  <p>ここではフェードアウトするdurationを属性に指定して、その値をもとにフェードアウトのスピードをコントロールしています</p>
+
+  <p>気になるのは引数のelementはネイティブの要素なのかそれともAngularJSが装飾しているのか、はたまたjQueryオブジェクトなのかという点ですが、 <br>
+  実際にはAngularJSがそれっぽく装飾したオブジェクトが入ってきます（jqLite） <br>
+  <a href="http://docs.angularjs.org/api/angular.element" target="_blank">AngularJS: element</a>にメソッド一覧がありますが、結構貧弱です <br>
+  とくにfindメソッドが「Limited to lookups by tag name.」となっているのでid指定ができません <br>
+  そもそも要素の操作自体はAngularJSに任せるのではなく、jQueryを使いたいところです <br>
+  AngularJSはDOMContentLoadedが呼ばれる前にjQueryが読み込まれていたら、そっちが使えます <br>
+  ただし、そのままではjqLiteのままなので、</p>
+
+<pre class="prettyprint linenums">
+jqElem = angular.element(element)
+</pre>
+
+  <p>でjQueryオブジェクトを取得します <br>
+  これで馴染みの操作が可能になります</p>
+
+<pre class="prettyprint linenums">
+$(jqElem).fadeOut attrs.duration
+</pre>
+
+  <p>あとはattrsからdurationを取得し、jQueryのfadeOutメソッドに渡しています</p>
+
+  <h3>サンプル</h3>
+
+  <div ng-controller="controller6">
+    <div controller6-directive duration="2000">
+      {{hello}}
+      <button class="btn btn-primary" id="fadeOut">fadeOut</button>
+    </div>
+  </div>
+
+  <p><a href="http://www.youtube.com/watch?v=bk-CC61zMZk" target="_blank">AngularJS and DOM Manipulation - YouTube</a></p>
+
+  <h2 class="page-header">directiveを複雑に使ってみる</h2>
+
+  <p><a href="http://docs.angularjs.org/guide/directive" target="_blank">AngularJS: Directives</a>には2種類のdirectiveの使い方が書かれている <br>
+  1つは上記で説明したdirectiveの第2引数でfunctionを返す方法 <br>
+  2つ目はfunctionを返さずにハッシュを返す方法 <br>
+  2つ目の方法は、directiveで指定したタグ内を自由に書き換えることができる、つまりいろいろできる版だ</p>
+
+  <p>問題は、かなりややこしいという点 <br>
+  directiveを指定するとそれっぽくその中身を書き換えることを考えるとテンプレートが必要ですが、そういった機能をそこそこきれいに書けたりする</p>
+
+  <p>まずはHTML部分を見ていただきたい</p>
+
+  <p>コントローラーの中にng-modelと、controller7-directiveが指定されたタグがある <br>
+  キモとなるのはdirectiveが指定されたタグのほうだ <br>
+  タグの中には何も指定されていないがサンプルで見れるように中にいろいろと要素がある <br>
+  重要なのはdirectiveが指定されたタグにある属性たち、これがdirectiveに渡せる情報になる</p>
+
+<pre class="prettyprint linenums">
+&lt;div ng-controller=&quot;controller7&quot;&gt;
+  &lt;p&gt;以下のテキストボックスはdirectiveの親のスコープにある&lt;/p&gt;
+  &lt;p&gt;&lt;input type=&quot;text&quot; ng-model=&quot;note&quot;&gt;&lt;/p&gt;
+  &lt;div controller7-directive name=&quot;hisasann&quot; note=&quot;note&quot; alert-message=&quot;showMessage(kindKey)&quot;&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+</pre>
+
+<pre class="prettyprint linenums">
+do () -&gt;
+  window.controller7 = ($scope) -&gt;
+    $scope.note = &apos;default note&apos;
+
+    $scope.showMessage = (kind) -&gt;
+      window.alert kind
+
+  angular.module(&apos;controller7Module&apos;, [])
+    .directive(&apos;controller7Directive&apos;, () -&gt;
+      template: &apos;&lt;p&gt;Hello World! {{name}} {{note}}&lt;/p&gt;&apos; +
+                &apos;&lt;p&gt;以下を入力してからalertを押してください&lt;/p&gt;&apos; +
+                &apos;&lt;p&gt;&lt;input type=&quot;text&quot; ng-model=&quot;kind&quot;&gt;&lt;/p&gt;&apos; +
+                &apos;&lt;p&gt;&lt;button class=&quot;btn btn-primary&quot; ng-click=&quot;alertMessage({kindKey: kind})&quot;&gt;alert&lt;/button&gt;&lt;/p&gt;&apos;   # or templateUrl: &quot;&quot;
+      replace: false
+      restrict: &quot;A&quot;
+      scope: # use &quot;@&quot;, &quot;=&quot;, or &quot;&amp;&quot;
+        name: &apos;@&apos;   # bind attribute
+        note: &apos;=&apos;   # parent scope
+        alertMessage: &apos;&amp;&apos;   # Expression
+      link: (scope, element, attr) -&gt;
+        scope.$watch(
+          &apos;kind&apos;
+          (newValue, oldValue) -&gt;
+            console.log newValue, &apos; &apos;, oldValue
+        )
+
+        setTimeout(-&gt;
+            scope.name = &apos;rastaman&apos;
+            scope.$digest()   # fire all the watches
+          , 2000)
+    )
+</pre>
+
+  <p>templeteは外部に抜き出してtempleteUrlとしてもよいみたい</p>
+
+  <p>scopeのnameはdirectiveが指定されたタグに書かれている属性で、noteはdirectiveが指定された要素の親のスコープにあるmodel、 <br>
+  alertMessageにはメソッドの実行コードが入っている</p>
+
+  <p>linkというメソッドとは別にcompileというメソッドもあるのだが、compileのほうはscopeが引数に取れないので今いち使いドコロがわかっていない <br>
+  さらにlinkとcompileは両方書いてもどちらか一方しか動かない（これもハマった…） <br>
+  なのでlinkを使っている</p>
+
+  <p>ちなみにtemplateに書いたものはいつの間にかdirectiveが指定されたタグの中に展開されるので、ここが面白いところ <br>
+  linkの中では$watchで値の監視をし、$digestで値の変更を反映している、非同期にmodelの値を書き換えた場合はどうも$digestしないと反映されないみたいだ</p>
+
+  <p>上記コードで一番やっかいだったのが、scopeに書いてあるalertMessageが動く仕組みだ br
+  alertMessageには&が指定されているので、何かしら評価される式が入っている <br>
+  HTMLのほう見てみると中身にshowMessage(kindKey)と書かれている、つまりalertMessageを呼ぶと間接的にshowMessage(kindKey)が呼ばれる <br>
+  もちろんこのshowMessage(kindKey)はdirectiveが存在するscopeに無ければ動かない <br>
+  さらにそのalertMessageを実行するボタンはdirectiveのtemplateに存在している、</p>
+
+<pre class="prettyprint linenums">
+ng-click="alertMessage({kindKey: kind})"
+</pre>
+
+  <p>この部分だが、これはkindというmodelをkindKeyというkeyとしてshowMessageに渡している <br>
+  どうもハッシュとして渡さないとkindをうまく渡せなかったので、これが定石なパターンなのか不明だが、記事をいろいろ見るとこうしているケースが多々あるので今はこれに落ち着いた</p>
+
+<pre class="prettyprint linenums">
+$scope.showMessage = (kind) ->
+window.alert kind
+</pre>
+
+  <p>これだけの過程を経て、やっとこのalertが表示される（ながっ！）</p>
+
+  <p>directiveの使い方としては、<a href="http://jsfiddle.net/simpulton/VJ94U/" target="_blank">AngularJS Sticky Notes - jsFiddle</a>や<a href="http://jsfiddle.net/maxisam/QrCXh/" target="_blank">AngularJS Isolated Scope Experiment - jsFiddle</a>なんかが面白い</p>
+
+  <p><a href="http://onehungrymind.com/angularjs-sticky-notes-pt-2-isolated-scope/" target="_blank">AngularJS Sticky Notes Pt 2 – Isolated Scope | One Hungry Mind</a>ここを読むとヒントが得られるかもしれない</p>
+
+  <h3>restrict（制限）の種類</h3>
+
+  <p>制限という名前になっているので分かりにくいが、要はdirectiveをどう指定したか <br>
+  要素として書かれたのか属性として指定されたのかということ <br>
+  割りと要素としてそのまま書いている記事が多いのでそれが主流っぽさがある</p>
+
+  <table class="table table-bordered table-striped">
+    <tr>
+      <td>E</td>
+      <td class="ng-binding">Element name</td>
+    </tr>
+    <tr>
+      <td>A</td>
+      <td class="ng-binding">Attribute</td>
+    </tr>
+    <tr>
+      <td>C</td>
+      <td class="ng-binding">Class</td>
+    </tr>
+    <tr>
+      <td>M</td>
+      <td class="ng-binding">Comment</td>
+    </tr>
+  </table>
+
+  <h3>scopeの種類</h3>
+
+  <p>どうもいつのバージョンかでこの書き方が変わったらしい <br>
+  ネットの記事では@の部分をbindとしているのを見かけるが今はbindとしてももちろん動かない（これでかなりハマった…） <br></p>
+
+  <p>割りと使うのは@かなーと思うが、これはcompileメソッドやlinkメソッド内のattrs引数から取得できるので取れなくもない <br>
+  ただしテンプレートとに何もせずともbindされるので使えるのかな</p>
+
+  <table class="table table-bordered table-striped">
+    <tr>
+      <td>@</td>
+      <td class="ng-binding">属性の値をテンプレートにbindする</td>
+    </tr>
+    <tr>
+      <td>=</td>
+      <td class="ng-binding">親のスコープにあるmodelを使う</td>
+    </tr>
+    <tr>
+      <td>&</td>
+      <td class="ng-binding">親スコープのコンテキストで式を実行する</td>
+    </tr>
+  </table>
+
+  <h3>サンプル</h3>
+
+  <div ng-controller="controller7">
+    <p>以下のテキストボックスはdirectiveの親のスコープにある</p>
+    <p><input type="text" ng-model="note"></p>
+    <div controller7-directive name="hisasann" note="note" alert-message="showMessage(kindKey)">
+    </div>
+  </div>
+
+  <p><a href="http://www.fine-der.net/angularjsdirective%E3%82%92%E4%BD%9C%E3%81%A3%E3%81%A6%E3%81%BF%E3%82%8B%E3%80%82/" target="_blank">[AngularJS]directiveを作ってみる。 | fine:der.</a></p>
+
+  <p><a href="http://www.youtube.com/watch?feature=player_embedded&v=Yg-R1gchccg" target="_blank">AngularJS - Directive Tutorial - YouTube</a></p>
+
+  <p> <a href="http://www.youtube.com/watch?v=A6wq16Ow5Ec" target="_blank">AngularJS - Custom Components - Part 1 - YouTube</a></p>
+
+
+
+
+
+
+</div>
+
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/angular.js"></script>
+<script type="text/javascript" src="js/index.min.js"></script>
+<script type="text/javascript" src="js/google-code-prettify/prettify.js"></script>
+<script type="text/javascript" src="js/bootstrap/bootstrap.min.js"></script>
+<script src="js/bootstrap/bootstrap-transition.js"></script>
+<script src="js/bootstrap/bootstrap-alert.js"></script>
+<script src="js/bootstrap/bootstrap-modal.js"></script>
+<script src="js/bootstrap/bootstrap-dropdown.js"></script>
+<script src="js/bootstrap/bootstrap-scrollspy.js"></script>
+<script src="js/bootstrap/bootstrap-tab.js"></script>
+<script src="js/bootstrap/bootstrap-tooltip.js"></script>
+<script src="js/bootstrap/bootstrap-popover.js"></script>
+<script src="js/bootstrap/bootstrap-button.js"></script>
+<script src="js/bootstrap/bootstrap-collapse.js"></script>
+<script src="js/bootstrap/bootstrap-carousel.js"></script>
+<script src="js/bootstrap/bootstrap-typeahead.js"></script>
+
+</body>
+</html>

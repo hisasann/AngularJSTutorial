@@ -1,0 +1,29 @@
+/* line 1, ../scss/index.scss */
+body {
+  padding-top: 60px;
+  /* 60px to make the container go all the way to the bottom of the topbar */
+}
+
+/* line 22, ../scss/index.scss */
+.even {
+  background-color: #3eb932;
+  *zoom: 1;
+  filter: progid:DXImageTransform.Microsoft.gradient(gradientType=0, startColorstr='#FF5ACF4F', endColorstr='#FF3EB932');
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #5acf4f), color-stop(100%, #3eb932));
+  background-image: -webkit-linear-gradient(#5acf4f 0%, #3eb932 100%);
+  background-image: -moz-linear-gradient(#5acf4f 0%, #3eb932 100%);
+  background-image: -o-linear-gradient(#5acf4f 0%, #3eb932 100%);
+  background-image: linear-gradient(#5acf4f 0%, #3eb932 100%);
+}
+
+/* line 26, ../scss/index.scss */
+.odd {
+  background-color: #ccab1f;
+  *zoom: 1;
+  filter: progid:DXImageTransform.Microsoft.gradient(gradientType=0, startColorstr='#FFE1C23D', endColorstr='#FFCCAB1F');
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #e1c23d), color-stop(100%, #ccab1f));
+  background-image: -webkit-linear-gradient(#e1c23d 0%, #ccab1f 100%);
+  background-image: -moz-linear-gradient(#e1c23d 0%, #ccab1f 100%);
+  background-image: -o-linear-gradient(#e1c23d 0%, #ccab1f 100%);
+  background-image: linear-gradient(#e1c23d 0%, #ccab1f 100%);
+}

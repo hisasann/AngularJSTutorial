@@ -1,0 +1,28 @@
+body {
+  padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+}
+
+@import "compass";
+
+@mixin gradient-top-lighten($color: #666, $lighten: 10%) {
+  background-color: $color;
+  @include filter-gradient(lighten($color, $lighten), $color, vertical);
+  @include background-image(linear-gradient(lighten($color, $lighten) 0%, $color 100%));
+}
+
+@mixin gradient-top-darken($color: #666, $darken: 10%) {
+  background-color: $color;
+  @include filter-gradient(darken($color, $darken), $color, vertical);
+  @include background-image(linear-gradient(darken($color, $darken) 0%, $color 100%));
+}
+
+$even-color: #3eb932;
+$odd-color: #ccab1f;
+
+.even {
+  @include gradient-top-lighten($even-color);
+}
+
+.odd {
+  @include gradient-top-lighten($odd-color);
+}
