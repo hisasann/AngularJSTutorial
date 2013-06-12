@@ -10,13 +10,14 @@
   "devDependencies": {
     "grunt": "~0.4.0",
     "grunt-contrib": "*",
-    "grunt-contrib-watch": "0.2.0rc7",
-    "grunt-contrib-concat": "~0.1.2rc6",
-    "grunt-contrib-coffee": "~0.4.0rc7",
-    "grunt-contrib-mincss": "~0.4.0rc7",
-    "grunt-contrib-clean": "~0.4.0rc6",
-    "grunt-contrib-compass": "~0.1.1rc7",
-    "grunt-contrib-uglify": "~0.1.1"
+    "grunt-contrib-watch": "*",
+    "grunt-contrib-concat": "*",
+    "grunt-contrib-coffee": "*",
+    "grunt-contrib-cssmin": "*",
+    "grunt-contrib-clean": "*",
+    "grunt-contrib-compass": "*",
+    "grunt-contrib-uglify": "*",
+    "grunt-yukkuroid": "*"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

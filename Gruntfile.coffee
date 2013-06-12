@@ -1,9 +1,6 @@
-# npm instlal grunt@4.0
-# grunt watch
-"use strict"
-
 #global module:false
 module.exports = (grunt) ->
+  "use strict"
 
   # Project configuration.
   grunt.initConfig
@@ -20,15 +17,6 @@ module.exports = (grunt) ->
 
     # ------------------------------------------------------------------------
     coffee:
-#      compile: {
-#        options: {
-#          bare: false
-#        },
-#        files: {
-#          'js/*.js': 'coffee/**/*.coffee',
-#          'nodejs/json.js': ['nodejs/**/*.coffee']
-#        }
-#      }
       glob_to_multiple:
         files: grunt.file.expandMapping(["coffee/**/*.coffee", 'nodejs/**/*.coffee'], "",
           rename: (destBase, destPath) ->
@@ -41,9 +29,8 @@ module.exports = (grunt) ->
         options:
           beautify: false
           mangle: false
-
         files:
-          "js/index.min.js": ["coffee/index.js"]
+            "js/index.min.js": ["coffee/index.js"]
 
     # ------------------------------------------------------------------------
     concat:
@@ -51,18 +38,12 @@ module.exports = (grunt) ->
         separator: ";"
         stripBanners: true
         banner: "<%= meta.banner %>"
-
       dist:
         src: ["js/index.min.js"]
         dest: "js/index.min.js"
 
     # ------------------------------------------------------------------------
     compass:
-    #      dev: {
-    #        options: {
-    #          config: 'scss/config/config.rb'
-    #        }
-    #      },
       dev:
         options:
           sassDir: "scss"
@@ -73,7 +54,7 @@ module.exports = (grunt) ->
           sassDir: "scss"
           cssDir: "css"
 
-    mincss:
+    cssmin:
       compress:
         files:
           "css/index.min.css": ["css/index.css"]
@@ -83,7 +64,6 @@ module.exports = (grunt) ->
       compass:
         files: ["scss/**/*.scss"]
         tasks: ["clean", "compass-dev", "mincss"]
-
       coffee:
         files: ["coffee/**/*.coffee"]
         tasks: ["coffee", "uglify", "concat"]
@@ -91,7 +71,10 @@ module.exports = (grunt) ->
     # ------------------------------------------------------------------------
     clean:
       build:
-        src: ["css/index.css", "css/index.min.css"]
+        src: ["css/index.css", "css/index.min.css", "js/index.min.js"]
+
+    yukkuroid:
+      message: '終わったよ'
 
     # ------------------------------------------------------------------------
     jshint:
@@ -115,14 +98,15 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks "grunt-contrib-watch"
   grunt.loadNpmTasks "grunt-contrib-concat"
   grunt.loadNpmTasks "grunt-contrib-coffee"
-  grunt.loadNpmTasks "grunt-contrib-mincss"
+  grunt.loadNpmTasks "grunt-contrib-cssmin"
   grunt.loadNpmTasks "grunt-contrib-clean"
   grunt.loadNpmTasks "grunt-contrib-compass"
   grunt.loadNpmTasks "grunt-contrib-uglify"
+  grunt.loadNpmTasks "grunt-yukkuroid"
 
   # compass task.
   grunt.registerTask "compass-dev", ["compass:dev"]
   grunt.registerTask "compass-prod", ["compass:prod"]
 
   # Default task.
-  grunt.registerTask "default", ["coffee", "clean", "compass-dev", "uglify", "concat", "mincss"]
+  grunt.registerTask "default", ["clean", "coffee", "compass-dev", "uglify", "concat", "cssmin"]

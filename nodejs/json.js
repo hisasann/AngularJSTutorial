@@ -5,6 +5,7 @@
 
   responseJson = function(res) {
     var entry;
+
     res.writeHead(200, {
       'Content-Type': 'text/plain',
       "Access-Control-Allow-Origin": "*"

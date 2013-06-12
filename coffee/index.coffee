@@ -52,7 +52,7 @@ do () ->
 do () ->
   window.controller3 = ($scope, $http, $templateCache) ->
     $scope.method = 'GET'
-    $scope.url = 'http://localhost/~yhisamatsu/index.json'
+    $scope.url = 'index.json'
 
     $scope.name = ''
     $scope.siteUrl = ''

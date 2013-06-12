@@ -1,5 +1,4 @@
 (function() {
-
   (function($) {
     return $(function() {
       prettyPrint();
@@ -43,6 +42,7 @@
 
   (function() {
     var modal;
+
     modal = $('#modal');
     return window.controller2 = function($scope) {
       $scope.childName = 'controller2';
@@ -61,7 +61,7 @@
   (function() {
     return window.controller3 = function($scope, $http, $templateCache) {
       $scope.method = 'GET';
-      $scope.url = 'http://localhost/~yhisamatsu/index.json';
+      $scope.url = 'index.json';
       $scope.name = '';
       $scope.siteUrl = '';
       return $scope.fetch = function() {
@@ -108,6 +108,7 @@
     return angular.module('controller6Module', []).directive('controller6Directive', function() {
       return function(scope, element, attrs) {
         var jqElem;
+
         scope.hello = 'controller6';
         jqElem = angular.element(element);
         return jqElem.find('#fadeOut').bind('click', function() {
